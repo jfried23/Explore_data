@@ -99,7 +99,7 @@
     var yscl = d3.scale.linear()
                .range([mar.t, canvas.attr('height')-mar.b])
                .domain([ d3.max( data, function(d){ return d.y;} ),
-                         d3.min( data, function(d){ return d.y;} )]);
+                         d3.min( data, function(d){ return d.y;} )-0.5]);
 
 
     var xscl = d3.scale.linear()
