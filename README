@@ -1,0 +1,2 @@
+This is a web app using D3.js and the nytimes web api to track party voting conformity in congress. 
+See it live @ https://congressional-conformity.herokuapp.com/index
