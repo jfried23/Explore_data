@@ -4,7 +4,7 @@
   <title>Congressional Voting Conformity</title>
   <script src='../static/d3.min.js'></script>
   <script>
-
+    var data = {{data|safe}}
   </script>
   <style type="text/css">
 
@@ -36,8 +36,8 @@
   <h3> </h3>
 
   <div>
-
-      {{fig|safe}}
+    <svg height=600 width=900 id='fig'>
+    </svg>
 
   </div>
 
@@ -80,6 +80,70 @@
     .attr("selected","selected");
 
 </script>
+
+<script>
+
+     var div = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
+    var canvas = d3.select('#fig');
+
+    var points = canvas.append('g');
+
+    var mar = { 't':20, 'b':100, 'l':50, 'r':10 };
+
+
+    var yscl = d3.scale.linear()
+               .range([mar.t, canvas.attr('height')-mar.b])
+               .domain([ d3.max( data, function(d){ return d.y;} ),
+                         d3.min( data, function(d){ return d.y;} )]);
+
+
+    var xscl = d3.scale.linear()
+               .range([mar.l, canvas.attr('width')-mar.r-mar.l])
+               .domain([ d3.min( data, function(d){ return d.x;} ),
+                         d3.max( data, function(d){ return d.x;} )]);
+
+  points.selectAll('circles')
+        .data( data )
+        .enter()
+        .append('circle')
+        .attr('cx', function(d){ return xscl(+d.x);})
+        .attr('cy', function(d){ return yscl(+d.y);})
+        .attr( 'fill', function(d){ if( d.id==4){return 'black';} } )
+        .attr('r',3)
+        .on('mouseover',
+          function(d){
+            d3.select(this).attr('r',8);
+            div.transition()
+                .duration(200)
+                .style("opacity", .9);
+            div.html( d.s )
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+            } )
+
+         .on('mouseout', function(d){ d3.select(this).attr('r',3)});
+
+
+  points.attr('transform','translate('+mar.l+','+mar.t+')');
+  var scls = d3.selectAll('svg');
+
+  var yscle = d3.svg.axis().scale(yscl).orient("left").ticks(5);
+  var xscle = d3.svg.axis().scale(xscl).orient("bottom").ticks(20);
+  scls.append('g').call(yscle)
+      .attr('transform','translate('+ 2*mar.l+','+mar.t+')')
+      .attr('fill','').attr('stroke-width',0.3);
+  scls.append('g').call(xscle).attr('transform','translate('+mar.l+',514)');
+
+  d3.selectAll('svg')
+    .append('text')
+    .text('Average Time to First Checkup (Months)')
+     .attr('transform', 'translate(450,570)');
+
+</script>
+
 
 
 </body>

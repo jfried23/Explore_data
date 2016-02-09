@@ -2,14 +2,13 @@ import os, io
 import flask
 import simplejson
 import numpy as np
+import math
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
 
 
 app = flask.Flask( __name__ )
 
-def calc_time_to_visit( df, race=None, cut = 5):
+def calc_time_to_visit( df, race=None, cut = 5,):
     """
     This calculates the average rate of premature birth 'prem_birth_rate_by_state'
     and the average month of pregancy in which healthcare began for each state.
@@ -31,7 +30,8 @@ def calc_time_to_visit( df, race=None, cut = 5):
     tmp = n.groupby('State').agg({'tmp':np.sum})
     avg_care_began = tmp.values/total_coh_births.values
 
-    return avg_care_began.flatten().tolist(), prem_birth_rate_by_state.values.tolist()
+    return avg_care_began.flatten().tolist(), prem_birth_rate_by_state.values.tolist(),tmp.index
+
 
 
 @app.route('/index', methods=['POST','GET'])
@@ -41,15 +41,16 @@ def run_index():
 
     df = pd.read_csv('./static/cleaned.csv')
 
-    x,y= calc_time_to_visit(df)
-    figfile = io.BytesIO()
-    sns.plt.scatter(x,y)
-    sns.plt.savefig(figfile, format='svg')
-    figdata_svg = figfile.getvalue()
-    figdata_svg ='<svg' + figfile.getvalue().split('<svg')[1]
+    to_pass =[]
+
+    x,y,s= calc_time_to_visit(df, race=1)
+    for i,v in enumerate( x ):
+      if math.isnan(y[i]): continue
+
+      to_pass.append({'x':x[i],'y':y[i],'id':4, 's':s[i]})
 
 
-    return flask.render_template( 'index.html', fig=figdata_svg  )
+    return flask.render_template( 'index.html', data=simplejson.dumps(to_pass)  )
 
   elif flask.request.method == 'POST':
     print flask.request.form.getlist('eth_id')
