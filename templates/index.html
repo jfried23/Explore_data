@@ -107,6 +107,11 @@
                .domain([ d3.min( data, function(d){ return d.x;} ),
                          d3.max( data, function(d){ return d.x;} )]);
 
+    var rscl = d3.scale.linear()
+               .range([2,10])
+               .domain([ d3.min( data, function(d){ return d.r;} ),
+                         d3.max( data, function(d){ return d.r;} )]);
+
   points.selectAll('circles')
         .data( data )
         .enter()
@@ -120,19 +125,17 @@
                         else if  (d.id==1){return '#984ea3';}
                         else              {return '#ff7f00';}
                           } )
-        .attr('r',3)
+        .attr('r',function(d){return rscl(d.r);})
         .on('mouseover',
           function(d){
-            d3.select(this).attr('r',8);
+            d3.select(this)
             div.transition()
                 .duration(200)
                 .style("opacity", .9);
             div.html( state_codes[d.s] )
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
-            } )
-
-         .on('mouseout', function(d){ d3.select(this).attr('r',3)});
+            } );
 
 
   points.attr('transform','translate('+mar.l+','+mar.t+')');

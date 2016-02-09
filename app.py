@@ -30,7 +30,7 @@ def calc_time_to_visit( df, race=None, cut = 5,):
     tmp = n.groupby('State').agg({'tmp':np.sum})
     avg_care_began = tmp.values/total_coh_births.values
 
-    return avg_care_began.flatten().tolist(), prem_birth_rate_by_state.values.tolist(),tmp.index
+    return avg_care_began.flatten().tolist(), prem_birth_rate_by_state.values.tolist(), tmp.index.tolist(), tmp['tmp'].values.tolist()
 
 
 
@@ -43,11 +43,11 @@ def run_index():
 
     to_pass =[]
 
-    x,y,s= calc_time_to_visit(df, race=0)
+    x,y,s, r= calc_time_to_visit(df, race=0)
     for i,v in enumerate( x ):
       if math.isnan(y[i]): continue
 
-      to_pass.append({'x':x[i],'y':y[i],'id':4, 's':s[i]})
+      to_pass.append({'x':x[i],'y':y[i],'id':4, 's':s[i], 'r':r[i]})
 
 
     return flask.render_template( 'index.html', data=simplejson.dumps(to_pass)  )
