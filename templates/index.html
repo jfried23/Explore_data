@@ -104,7 +104,7 @@
 
     var xscl = d3.scale.linear()
                .range([mar.l, canvas.attr('width')-mar.r-mar.l])
-               .domain([ d3.min( data, function(d){ return d.x;} ),
+               .domain([ d3.min( data, function(d){ return d.x;} )-.05,
                          d3.max( data, function(d){ return d.x;} )]);
 
     var rscl = d3.scale.linear()
