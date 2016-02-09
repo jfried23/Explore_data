@@ -43,7 +43,7 @@ def run_index():
 
     to_pass =[]
 
-    x,y,s= calc_time_to_visit(df, race=1)
+    x,y,s= calc_time_to_visit(df, race=0)
     for i,v in enumerate( x ):
       if math.isnan(y[i]): continue
 

@@ -3,8 +3,10 @@
 <head>
   <title>Congressional Voting Conformity</title>
   <script src='../static/d3.min.js'></script>
-  <script>
+  <script src='../static/state_codes.js'></script>
+  <script >
     var data = {{data|safe}}
+
   </script>
   <style type="text/css">
 
@@ -47,7 +49,7 @@
       <table>
       <tbody>
        <tr>
-           <td> <label>American Indian or Alaska Native</label> <input type="checkbox" name="eth_id" value="0"> </td>
+           <td> <label >American Indian or Alaska Native</label> <input type="checkbox" name="eth_id" value="0"> </td>
            <td> <label>Asian or Pacific Islander</label> <input type="checkbox" name="eth_id" value="1"> </td>
            <td> <label>Black or African American</label> <input type="checkbox" name="eth_id" value="2"> </td>
            <td> <label>White</label> <input type="checkbox" name="eth_id" value="3"> </td>
@@ -111,7 +113,13 @@
         .append('circle')
         .attr('cx', function(d){ return xscl(+d.x);})
         .attr('cy', function(d){ return yscl(+d.y);})
-        .attr( 'fill', function(d){ if( d.id==4){return 'black';} } )
+        .attr( 'fill', function(d){
+                        if       (d.id==4){return '#e41a1c';}
+                        else if  (d.id==3){return '#377eb8';}
+                        else if  (d.id==2){return '#4daf4a';}
+                        else if  (d.id==1){return '#984ea3';}
+                        else              {return '#ff7f00';}
+                          } )
         .attr('r',3)
         .on('mouseover',
           function(d){
@@ -119,7 +127,7 @@
             div.transition()
                 .duration(200)
                 .style("opacity", .9);
-            div.html( d.s )
+            div.html( state_codes[d.s] )
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
             } )
