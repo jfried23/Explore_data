@@ -74,11 +74,10 @@ def run_index():
 
 @app.route('/heatmap', methods=['GET','POST'])
 def run_heatmap():
-
   return flask.render_template( 'heatmap.html' )
 
 
-@app.route('/poverty',methods=['GET'])
+@app.route('/poverty',methods=['GET','POST'])
 def run_pov():
   return flask.render_template( 'poverty.html' )
 

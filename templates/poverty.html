@@ -28,7 +28,7 @@
 
   var state_codes = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'];
 
-  var mar = { t: 20, r: 4he0, b: 40 , l: 40},
+  var mar = { t: 20, r: 20, b: 40 , l: 100},
 
             width  = 900,
             height = 600;
@@ -42,7 +42,7 @@
                       function(data){
 
                       var xscale = d3.scale.linear()
-                                           .range([ 0, width-mar.r-mar.l])
+                                           .range([ 0, width-mar.l])
                                            .domain([ d3.min(data, function(d){ return +d.pov; })-1,
                                                     d3.max(data, function(d){ return +d.pov; })+1]);
 
