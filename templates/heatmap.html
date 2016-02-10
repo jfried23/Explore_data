@@ -22,7 +22,8 @@
         fill: #000;
       }
     </style>
-    <script src="http://d3js.org/d3.v3.js"></script>
+    <title>Heatmap</title>
+    <script src='../static/d3.min.js'></script>
   </head>
   <body>
     <div id="chart"></div>
@@ -37,7 +38,7 @@
           buckets = 9,
           colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"], // alternatively colorbrewer.YlGnBu[9]
           days = ["Native A.", "Asian", "African", "European"],
-          times = d3.range(51)
+          times = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'];
           datasets = ["heat.csv", "data2.tsv"];
 
       var svg = d3.select("#chart").append("svg")
