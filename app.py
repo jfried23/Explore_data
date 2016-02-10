@@ -78,6 +78,11 @@ def run_heatmap():
   return flask.render_template( 'heatmap.html' )
 
 
+@app.route('/poverty',methods=['GET'])
+def run_pov():
+  pass
+
+
 if __name__ == '__main__':
 
   #port = int(os.environ.get("PORT", 5000))
