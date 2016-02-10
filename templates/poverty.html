@@ -51,7 +51,15 @@
                          .attr('fill', 'red');
 
 
+                  var xaxis = d3.svg.axis().scale(yscale).orient("left").ticks(15);
+                  var yaxis = d3.svg.axis().scale(xscale).orient("bottom").ticks(10);
 
+
+                  /*d3.select('svg').append('g').call(yaxis);
+                  d3.select('svg').append('g').call(xaxis).attr('transform', 'translate(0,'+height-mar.t+)';
+                  */
+                    d3.selectAll('g')
+                      .attr('transform','translate('+mar.l+','+mar.t+')');
 
                     }
 
