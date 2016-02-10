@@ -52,23 +52,24 @@ def run_index():
       to_pass.append({'x':x[i],'y':y[i],'id':4, 's':s[i], 'r':r[i]})
 
 
-    return flask.render_template( 'index.html', data=simplejson.dumps(to_pass)  )
+    return flask.render_template( 'index.html', data=simplejson.dumps(to_pass), labels=['State Average']  )
 
   elif flask.request.method == 'POST':
+    rcnm = {0:'American Indian or Alaska Native',1:'Asian or Pacific Islander',2:'Black or African American',3:'White',4:'State Average'}
     eth_id =  flask.request.form.getlist('eth_id')
-    cutoff =  flask.request.form['months']
-    df = pd.read_csv('./static/cleaned.csv')
-
+    df = pd.read_csv('./static/cleaned.csv') 
     to_pass =[]
+    if len(eth_id)==0:eth_id=[4]
 
-
+    names=[]
     for e in eth_id:
-      x,y,s, r= calc_time_to_visit(df, race=int(e), cut=int(cutoff))
+      x,y,s, r= calc_time_to_visit(df, race=int(e), cut=5) #int(cutoff))
+      names.append(  rcnm[int(e)] ) 
       for i,v in enumerate( x ):
         if math.isnan(y[i]): continue
         to_pass.append({'x':x[i],'y':y[i],'id':e, 's':s[i], 'r':r[i]})
 
-    return flask.render_template( 'index.html', data=simplejson.dumps(to_pass)  )
+    return flask.render_template( 'index.html', data=simplejson.dumps(to_pass),labels=names  )
 
 
 

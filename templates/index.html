@@ -1,12 +1,12 @@
 <!DOCTYPE HTML>
 
 <head>
-  <title>Congressional Voting Conformity</title>
+  <title>Data Exploration</title>
   <script src='../static/d3.min.js'></script>
   <script src='../static/state_codes.js'></script>
   <script >
     var data = {{data|safe}}
-
+    var rcnm = {0:'American Indian or Alaska Native',1:'Asian or Pacific Islander',2:'Black or African American',3:'White',4:'State Average'}
   </script>
   <style type="text/css">
 
@@ -21,7 +21,7 @@
     position: absolute;
     text-align: center;
     width: 120px;
-    height: 28px;
+    height: 60px;
     padding: 2px;
     font: 12px sans-serif;
     background: lightsteelblue;
@@ -34,8 +34,10 @@
 </head>
 
 <body>
-  <h1></h1>
-  <h3> </h3>
+  <h1>Premature Birth Rate 2014</h1>
+  <h3> Compairing <br> <ul id=name></ul> </h3>
+
+  <p>Here we are plotting the state average rate of premature birth (optionally broken down by race) as a function of the mean delay between conception and first neonatle checkup for the ~3.9 million reccordered births in 2014. Sphere radi are proportional to the absolute number of recordered premature births in each state (thus roughly proportional to state population).</p>
 
   <div>
     <svg height=600 width=900 id='fig'>
@@ -56,7 +58,6 @@
            <td> <label>All</label> <input type="checkbox" name="eth_id" value="4"> </td>
       </tr>
 
-        <tr> <td>Maximum Gestational Age at Birth (Months):</td> <td><select id='months' name='months'></select></td></tr>
     </tbody></table>
 
 
@@ -71,6 +72,13 @@
   var default_age = 9;
   var checked =[4]
 
+  d3.select('#name')
+    .selectAll('li')
+    .data({{labels|safe}})
+    .enter()
+    .append('li')
+    .text( function(d){ return d;} );
+
   d3.select('#months')
     .selectAll('option')
     .data( d3.range(1,11) )
@@ -81,15 +89,11 @@
     .filter( function(d){ return d == default_age; })
     .attr("selected","selected");
 
-  d3.selectAll('checkbox')
-    .filter( function(d){ if (checked.indexOf( d.value ) > 0) {return true;}  } )
-    .attr("checked",true);
-
 </script>
 
 <script>
 
-     var div = d3.select("body").append("div")
+   var div = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
@@ -112,7 +116,7 @@
                          d3.max( data, function(d){ return d.x;} )]);
 
     var rscl = d3.scale.linear()
-               .range([2,10])
+               .range([5,15])
                .domain([ d3.min( data, function(d){ return d.r;} ),
                          d3.max( data, function(d){ return d.r;} )]);
 
@@ -122,6 +126,7 @@
         .append('circle')
         .attr('cx', function(d){ return xscl(+d.x);})
         .attr('cy', function(d){ return yscl(+d.y);})
+	.style("opacity", .9)
         .attr( 'fill', function(d){
                         if       (d.id==4){return '#e41a1c';}
                         else if  (d.id==3){return '#377eb8';}
@@ -136,7 +141,7 @@
             div.transition()
                 .duration(200)
                 .style("opacity", .9);
-            div.html( state_codes[d.s] )
+            div.html( state_codes[d.s] +'<br><br> '+rcnm[d.id] )
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
             } );
@@ -145,8 +150,8 @@
   points.attr('transform','translate('+mar.l+','+mar.t+')');
   var scls = d3.selectAll('svg');
 
-  var yscle = d3.svg.axis().scale(yscl).orient("left").ticks(5);
-  var xscle = d3.svg.axis().scale(xscl).orient("bottom").ticks(20);
+  var yscle = d3.svg.axis().scale(yscl).orient("left").ticks(15);
+  var xscle = d3.svg.axis().scale(xscl).orient("bottom").ticks(10);
   scls.append('g').call(yscle)
       .attr('transform','translate('+ 2*mar.l+','+mar.t+')')
       .attr('fill','').attr('stroke-width',0.3);
@@ -156,6 +161,11 @@
     .append('text')
     .text('Average Time to First Checkup (Months)')
      .attr('transform', 'translate(450,570)');
+
+  d3.selectAll('svg')
+    .append('text')
+    .text('Percentage of Births that are Premature (%)')
+    .attr('transform', ['translate(50,375)', 'rotate(-90)']);
 
 </script>
 
