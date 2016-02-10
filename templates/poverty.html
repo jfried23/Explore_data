@@ -87,7 +87,7 @@
 
 
                   d3.select('svg').append('g').call(yaxis).attr('transform','translate('+mar.l+','+ mar.t +')');
-                  d3.select('svg').append('g').call(xaxis).attr('transform','translate('+mar.l+','+ (height-mar.b) +')');
+                  d3.select('svg').append('g').call(xaxis).attr('transform','translate('+mar.l+','+ (height-mar.b-6) +')');
 
 
                   canvas.append("text")
