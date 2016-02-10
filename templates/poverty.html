@@ -28,10 +28,10 @@
 
   var state_codes = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'];
 
-  var mar = { t: 20, r: 20, b: 40 , l: 100},
+  var mar = { t: 20, r: 20, b: 80 , l: 100},
 
             width  = 900,
-            height = 600;
+            height = 630;
 
 
 
@@ -88,6 +88,16 @@
 
                   d3.select('svg').append('g').call(yaxis).attr('transform','translate('+mar.l+','+ mar.t +')');
                   d3.select('svg').append('g').call(xaxis).attr('transform','translate('+mar.l+','+ (height-mar.b) +')');
+
+
+                  canvas.append("text")
+                  .text("Percentage of children living below poverty line. (%)")
+                  .attr("x", 350)
+                  .attr("y", 600);
+
+                  canvas.append('text')
+                  .text('Percentage of Births that are Premature (%)')
+                  .attr('transform', ['translate(50,400)', 'rotate(-90)']);
 
                     /*d3.selectAll('g')
                       .attr('transform','translate('+mar.l+','+mar.t+')'); */
