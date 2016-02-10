@@ -8,14 +8,16 @@ import pandas as pd
 
 app = flask.Flask( __name__ )
 
-def calc_time_to_visit( df, race=None, cut = 5,):
+
+
+def calc_time_to_visit( df, race, cut = 5,):
     """
     This calculates the average rate of premature birth 'prem_birth_rate_by_state'
     and the average month of pregancy in which healthcare began for each state.
     """
     a=df
     a= a[ a['month_care_began'] < 10 ]
-    if race != None: a=a[ a['Race'] == race ]
+    if race !=4: a=a[ a['Race'] == race ]
 
     a['premature'] = a['Gestational_Age'] < cut
 
@@ -43,7 +45,7 @@ def run_index():
 
     to_pass =[]
 
-    x,y,s, r= calc_time_to_visit(df, race=0)
+    x,y,s, r= calc_time_to_visit(df, race=4)
     for i,v in enumerate( x ):
       if math.isnan(y[i]): continue
 
@@ -53,9 +55,20 @@ def run_index():
     return flask.render_template( 'index.html', data=simplejson.dumps(to_pass)  )
 
   elif flask.request.method == 'POST':
-    print flask.request.form.getlist('eth_id')
-    print flask.request.form['months']
-    return 'done'
+    eth_id =  flask.request.form.getlist('eth_id')
+    cutoff =  flask.request.form['months']
+    df = pd.read_csv('./static/cleaned.csv')
+
+    to_pass =[]
+
+
+    for e in eth_id:
+      x,y,s, r= calc_time_to_visit(df, race=int(e), cut=int(cutoff))
+      for i,v in enumerate( x ):
+        if math.isnan(y[i]): continue
+        to_pass.append({'x':x[i],'y':y[i],'id':e, 's':s[i], 'r':r[i]})
+
+    return flask.render_template( 'index.html', data=simplejson.dumps(to_pass)  )
 
 
 

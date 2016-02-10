@@ -81,6 +81,10 @@
     .filter( function(d){ return d == default_age; })
     .attr("selected","selected");
 
+  d3.selectAll('checkbox')
+    .filter( function(d){ if (checked.indexOf( d.value ) > 0) {return true;}  } )
+    .attr("checked",true);
+
 </script>
 
 <script>
