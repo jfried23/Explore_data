@@ -72,7 +72,7 @@ def run_index():
     return flask.render_template( 'index.html', data=simplejson.dumps(to_pass),labels=names  )
 
 
-@app.route('/heatmap', methods=['GET'])
+@app.route('/heatmap', methods=['GET','POST'])
 def run_heatmap():
 
   return flask.render_template( 'heatmap.html' )
