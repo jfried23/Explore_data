@@ -80,7 +80,7 @@ def run_heatmap():
 
 @app.route('/poverty',methods=['GET'])
 def run_pov():
-  pass
+  return flask.render_template( 'poverty.html' )
 
 
 if __name__ == '__main__':

@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<head>
+  <title>Poverty Analysis</title>
+  <script src='../static/d3.min.js'></script>
+</head>
+<body>
+
+ <div >
+
+   <svg id="chart"> </svg>
+
+ </div>
+
+</body>
+<script>
+
+
+  var mar = { t: 20, r: 20, b: 40 , l: 40},
+
+            width  = 900,
+            height = 600;
+
+
+  var read_file = function(csvFile) {
+                    d3.csv(csvFile, function(d) {
+                                    return { race: +d.Race, rate: +d.Births, st: +d.State_code, pov:+d.PovPer};},
+
+                      function(data){
+
+                      var xscale = d3.scale.linear()
+                                           .range([ 0, width-mar.r-mar.l])
+                                           .domain([ d3.min(data, function(d){ return +d.pov; })-1,
+                                                    d3.max(data, function(d){ return +d.pov; })+1]);
+
+                      var yscale = d3.scale.linear()
+                                           .range([ 0, height-mar.t-mar.b])
+                                           .domain([ d3.max(data, function(d){ return +d.rate; })+1,
+                                                    d3.min(data, function(d){ return +d.rate; })-1]);
+
+                      var canvas = d3.select('#chart');
+
+                   canvas.attr('height', height).attr('width',width);
+
+                   canvas.append('g').selectAll('circle')
+                         .data( data )
+                         .enter()
+                         .append('circle')
+                         .attr('cx', function(d){ return xscale( d.pov  ); })
+                         .attr('cy', function(d){ return yscale( d.rate ); })
+                         .attr('r', 4)
+                         .attr('fill', 'red');
+
+
+
+
+                    }
+
+
+      )};
+
+  read_file('../static/poverty_data.csv');
+</script>
