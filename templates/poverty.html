@@ -2,6 +2,18 @@
 <head>
   <title>Poverty Analysis</title>
   <script src='../static/d3.min.js'></script>
+  <style>
+      div.tooltip {position: absolute;
+                   text-align: center;
+                   width: 30px;
+                   height: 30px;
+                   padding: 2px;
+                   font: 12px sans-serif;
+                   background: lightsteelblue;
+                   border: 0px;
+                   border-radius: 8px;
+                   pointer-events: none;}ß
+  </style>
 </head>
 <body>
 
@@ -14,11 +26,13 @@
 </body>
 <script>
 
+  var state_codes = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'];
 
   var mar = { t: 20, r: 20, b: 40 , l: 40},
 
             width  = 900,
             height = 600;
+
 
 
   var read_file = function(csvFile) {
@@ -39,6 +53,9 @@
 
                       var canvas = d3.select('#chart');
 
+
+                      var div = d3.select("body").append("div").attr("class", "tooltip").style("opacity", 0);
+
                    canvas.attr('height', height).attr('width',width);
 
                    canvas.append('g').selectAll('circle')
@@ -48,7 +65,19 @@
                          .attr('cx', function(d){ return xscale( d.pov  ); })
                          .attr('cy', function(d){ return yscale( d.rate ); })
                          .attr('r', 4)
-                         .attr('fill', 'red');
+                         .attr('fill', function(d){
+                                         if (d.race == 0){return '#8A2BE2'}
+                                    else if (d.race == 1){return '#E22E2B'}
+                                    else if (d.race == 2){return '#82E22B'}
+                                    else if (d.race == 3){return '#2BDEE2'} })
+                          .on('mouseover', function(d){ d3.select(this)
+                                                        div.transition()
+                                                           .duration(200)
+                                                           .style("opacity", .9);
+                                                        div.html( state_codes[d.st] )
+                                                           .style("left", (d3.event.pageX) + "px")
+                                                           .style("top", (d3.event.pageY - 28) + "px");} );
+
 
 
                   var xaxis = d3.svg.axis().scale(yscale).orient("left").ticks(15);
