@@ -11,7 +11,7 @@
       text.mono {
         font-size: 9pt;
         font-family: Consolas, courier;
-        fill: #aaa;
+        fill: #000;
       }
 
       text.axis-workweek {
@@ -86,8 +86,8 @@
           cards.append("title");
 
           cards.enter().append("rect")
-              .attr("x", function(d) { return (d.hour - 1) * gridSize; })
-              .attr("y", function(d) { return (d.day - 1) * gridSize; })
+              .attr("x", function(d) { return (d.hour ) * gridSize; })
+              .attr("y", function(d) { return (d.day ) * gridSize; })
               .attr("rx", 4)
               .attr("ry", 4)
               .attr("class", "hour bordered")
@@ -128,17 +128,7 @@
 
       heatmapChart('/static/heat1.csv');
 
-      var datasetpicker = d3.select("#dataset-picker").selectAll(".dataset-button")
-        .data(datasets);
 
-      datasetpicker.enter()
-        .append("input")
-        .attr("value", function(d){ return "Dataset " + d })
-        .attr("type", "button")
-        .attr("class", "dataset-button")
-        .on("click", function(d) {
-          heatmapChart(d);
-        });
     </script>
   </body>
 </html>
