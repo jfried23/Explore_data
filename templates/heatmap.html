@@ -28,18 +28,38 @@
   <body>
     <h1>Premature Birth Rate 2014</h1>
 
+      <p>This heat map represents ~3.9 million birth records (~5Gb plain text) collected by the CDC in 2014.
+      (See <a href='http://www.cdc.gov/nchs/data_access/vitalstatsonline.htm'>Vital Statistics Data</a> for details).
+      The dataset contains significant amounts of ethnographic and medical details on the births occurring in the US,
+      including details on the estimated gestation period for each birth. Defining a premature birth as one occurring
+      before 37 weeks gestation, I compiled rates of premature birth by the enthic origins of the mother and state of mothers residence.
+      Blank tiles indicate there was insufficient data for the demographic.
+      </p>
+
+
     <div id="chart"></div>
     <div id="dataset-picker">
-      <p></p>
+
+      <p>Racial disparities in premature birth rate are clearly evident but are not consistent from state to state.
+        Notice that the rate of premature birth for African Americans living in Louisiana (LA) is more then twice
+        the rate of the same demographic in Oregon (OR) or North Dakota (ND) for example.
+      </p>
+
+      <p>The CDC collects significant amounts of background information on the pregnancy, including the
+         how long into the pregnancy the mother was first evaluated by a physician (although unfortunatly not how freqently). I hypothized
+         premature birth rate might be correlated with this mean delay to first checkup as a proxy of access to healthcare.
+        See preliminary health care analysis below.
+      </p>
+
     </div>
 
       </div>
     <form method='POST' action='index'>
       <p>
-        See Preliminary healthcare anlaysis: <input   type='submit' name='submit' value='healthcare'></input>
+        See preliminary health care analysis: <input   type='submit' name='submit' value='healthcare'></input>
       </p>
       <p>
-       See Preliminary poverty anlaysis: <input   type='submit' name='submit' value='poverty'></input>
+       See Preliminary poverty analysis: <input   type='submit' name='submit' value='poverty'></input>
       </p>
   <div>
 
