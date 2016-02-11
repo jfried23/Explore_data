@@ -9,7 +9,6 @@ import pandas as pd
 app = flask.Flask( __name__ )
 
 
-
 def calc_time_to_visit( df, race, cut = 5,):
     """
     This calculates the average rate of premature birth 'prem_birth_rate_by_state'
@@ -19,7 +18,7 @@ def calc_time_to_visit( df, race, cut = 5,):
     a= a[ a['month_care_began'] < 10 ]
     if race !=4: a=a[ a['Race'] == race ]
 
-    a['premature'] = a['Gestational_Age'] < cut
+    a['premature'] = (a['Gestational_Age'] < cut)
 
     totl_state_births = a.groupby('State').agg({'num_births':np.sum})
     prem_birth_rate_by_state = 100*a[a.premature==True].groupby(['State']).agg({'num_births':np.sum})/totl_state_births
@@ -38,28 +37,37 @@ def calc_time_to_visit( df, race, cut = 5,):
 
 @app.route('/index', methods=['POST','GET'])
 def run_index():
+  global eth_id
 
   if flask.request.method == 'GET':
+    return flask.redirect( 'heatmap' )
 
-    df = pd.read_csv('./static/cleaned.csv')
-
-    to_pass =[]
-
-    x,y,s, r= calc_time_to_visit(df, race=4)
-    for i,v in enumerate( x ):
-      if math.isnan(y[i]): continue
-
-      to_pass.append({'x':x[i],'y':y[i],'id':4, 's':s[i], 'r':r[i]})
-
-
-    return flask.render_template( 'index.html', data=simplejson.dumps(to_pass), labels=['State Average']  )
 
   elif flask.request.method == 'POST':
-    rcnm = {0:'American Indian or Alaska Native',1:'Asian or Pacific Islander',2:'Black or African American',3:'White',4:'State Average'}
-    eth_id =  flask.request.form.getlist('eth_id')
+
+    button = flask.request.form['submit']
+
+    if button == 'heatmap':
+      return flask.redirect( 'heatmap' )
+    elif button == 'poverty':
+      return flask.redirect( 'poverty' )
+    elif button =='healthcare':
+      try: eth_id =  flask.request.form.getlist('eth_id')
+      except: eth_id =[]
+      return flask.redirect('healthcare' )
+
+
+
+@app.route('/healthcare', methods=['GET','POST'])
+def run_healthcare():
+    global eth_id
+
     df = pd.read_csv('./static/cleaned.csv')
+
+    rcnm = {0:'American Indian or Alaska Native',1:'Asian or Pacific Islander',2:'Black or African American',3:'White',4:'State Average'}
+
     to_pass =[]
-    if len(eth_id)==0:eth_id=[4]
+    if len(eth_id)==0: eth_id=[4]
 
     names=[]
     for e in eth_id:
@@ -69,8 +77,7 @@ def run_index():
         if math.isnan(y[i]): continue
         to_pass.append({'x':x[i],'y':y[i],'id':e, 's':s[i], 'r':r[i]})
 
-    return flask.render_template( 'index.html', data=simplejson.dumps(to_pass),labels=names  )
-
+    return flask.render_template( 'healthcare.html', data=simplejson.dumps(to_pass), labels=names )
 
 @app.route('/heatmap', methods=['GET','POST'])
 def run_heatmap():
@@ -83,6 +90,7 @@ def run_pov():
 
 
 if __name__ == '__main__':
+
 
   #port = int(os.environ.get("PORT", 5000))
   #app.run(host='0.0.0.0', port=port)
