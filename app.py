@@ -15,10 +15,11 @@ def calc_time_to_visit( df, race, cut = 5,):
     and the average month of pregancy in which healthcare began for each state.
     """
     a=df
-    a= a[ a['month_care_began'] < 10 ]
+    a = a[ a['month_care_began'] < 10 ]
     if race !=4: a=a[ a['Race'] == race ]
 
-    a['premature'] = (a['Gestational_Age'] < cut)
+    tmp=a['Gestational_Age'] < cut
+    a['premature'] = tmp
 
     totl_state_births = a.groupby('State').agg({'num_births':np.sum})
     prem_birth_rate_by_state = 100*a[a.premature==True].groupby(['State']).agg({'num_births':np.sum})/totl_state_births
