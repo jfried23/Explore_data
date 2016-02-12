@@ -2,9 +2,7 @@
 <meta charset="utf-8">
 <style>
 
-body {
-  font: 10px sans-serif;
-}
+
 
 .axis path,
 .axis line {
@@ -22,8 +20,7 @@ body {
 
 .line {
   fill: none;
-  stroke: steelblue;
-  stroke-width: 1.5px;
+
 }
 
 </style>
@@ -121,7 +118,7 @@ d3.csv("../static/number_visits.csv", function(error, data) {
     svg.append('text')
      .text('Number of Prenatal Checkups')
      .attr('x',x(9))
-     .attr('y',y(2))
+     .attr('y',y(1))
      ;
 
 
