@@ -52,12 +52,17 @@ def run_index():
       return flask.redirect( 'heatmap' )
     elif button == 'poverty':
       return flask.redirect( 'poverty' )
+    elif button == 'visits':
+      return flask.redirect( 'vists' )
     elif button =='healthcare':
       try: eth_id =  flask.request.form.getlist('eth_id')
       except: eth_id =[]
       return flask.redirect('healthcare' )
 
 
+@app.route('/vists', methods=['GET','POST'])
+def run_visits():
+  return flask.render_template( 'num_visits.html' )
 
 @app.route('/healthcare', methods=['GET','POST'])
 def run_healthcare():
