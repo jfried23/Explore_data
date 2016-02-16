@@ -21,19 +21,90 @@
       text.axis-worktime {
         fill: #000;
       }
+
+
+table {
+  border-collapse: collapse;
+}
+th,
+td {
+  border: 1px solid #cecfd5;
+  padding: 10px 15px;
+}
+
+
+      table.center {
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  <
     </style>
     <title>Heatmap</title>
     <script src='../static/d3.min.js'></script>
   </head>
   <body>
     <h1>Premature Birth Rate 2014</h1>
+    <h3>Background</h3>
+    <p>
+      The CDC collects vital statics on the demographics and medical histories of all pregnancies reported in the United States
+      stretching back to 1968. (See <a href='http://www.cdc.gov/nchs/data_access/vitalstatsonline.htm'>Vital Statistics Data</a>
+      for details). In 2014 alone ~5Gb of data was collected documenting ~3.9 million individual pregnancies.
+    </p>
 
-      <p>This heat map represents ~3.9 million birth records (~5Gb plain text) collected by the CDC in 2014.
-      (See <a href='http://www.cdc.gov/nchs/data_access/vitalstatsonline.htm'>Vital Statistics Data</a> for details).
-      The dataset contains significant ethnographic and medical details on the births occurring in the US,
-      including details on the estimated gestation period for each birth. Defining a premature birth as one occurring
-      before 37 weeks gestation, I compiled rates of premature birth by the enthic origins of the mother and state of mothers residence.
+    <p>
+As a zeroth order approach to understanding premature births in the United States a Random Forrest Model using 100 estimators was learned on 75% of the birth records for 2015, and tested on the remaining 25% of the data. A subset of the available data I guessed would be useful for predicting premature birth was used in the model optimization.
+Premature births were defined as those with less than 37 weeks reported gestational periods.
+    </p>
+
+      <h3>Random Forrest Model Paramaters</h3>
+  <div>
+
+
+  <ul>
+    <li>Mother born in the US?</li>
+    <li>Mothers race. (Categorical)</li>
+    <li>Payment method (e.g. medicade, private insurance, cash, ect.) (Catagorical)</li>
+    <li>Age of the mother.</li>
+    <li>Education level of the mother.</li>
+    <li>Number of previous pregnancies for this mother in which the child survived.</li>
+    <li>Number of previous pregnancies for this mother in which the child did not survive.</li>
+    <li>Months into the pregnancy before the first prenatal checkup.</li>
+    <li>Total number of prenatal checkups durring the pregnancy.</li>
+    <li>Cigarettes smoked per day before the pregnancy.</li>
+    <li>Cigarettes smoked per day durring Trimesters 1, 2, & 3. </li>
+    <li>BMI of mother before pregnancy. </li>
+    <li>Number of fetuses in the womb.</li>
+    <li>Number of weeks gestation. (Independent paramater.)</li>
+
+  </ul>
+  </div>
+
+  <p>
+    The selected model parameters optimized by f1-score did not provide sufficient information to predict premature birth better than naïvely guessing all births would have normal gestational periods (14.5% error vs 11.0% error). See confusion matrix below.
+
+  </p>
+
+  <div style="text-align:center;">
+
+  <table class="center">
+    <tr><td rowspan="2" colspan ='2'></td><td colspan ='2'>Prediction</td> </tr>
+    <tr><td>-</td> <td> + </td></tr>
+    <tr><td rowspan="2" >Truth</td> <td>-</td> <td>81.1%</td> <td> 7.5% </td> </tr>
+    <tr> <td>+</td> <td>7.0%</td> <td> 4.3% </td> </tr>
+  </table>
+
+  </div>
+
+    <p>
+      This is perhaps not surprising, pregnancies are enormously complicated biological processes and a large fraction of premature
+      births occure in women with no known risk factors. While premature birth cannot be reliably predicted on an indivigual level
+      population risks can be described.
+  </p>
+
+      <p> I first compiled rates of premature birth by the ethnic origins of the mother and state of mothers residence.
       Blank tiles indicate there was insufficient data for the demographic.
+
       </p>
 
 
@@ -45,11 +116,7 @@
         the rate of the same demographic in Oregon (OR) or North Dakota (ND) for example.
       </p>
 
-      <p>The CDC collects significant amounts of background information on the pregnancy, including the
-         how long into the pregnancy the mother was first evaluated by a physician (although unfortunatly not how freqently). I hypothized
-         premature birth rate might be correlated with this mean delay to first checkup as a proxy of access to healthcare.
-        See preliminary health care analysis below.
-      </p>
+
 
     </div>
 
