@@ -36,7 +36,7 @@ def calc_time_to_visit( df, race, cut = 5,):
 
 
 
-@app.route('/index', methods=['POST','GET'])
+@app.route('/', methods=['POST','GET'])
 def run_index():
   global eth_id
 
